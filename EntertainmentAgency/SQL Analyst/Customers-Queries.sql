@@ -28,6 +28,21 @@ inner join Engagements as e
 group by c.CustState, c.CustCity
 order by NumEngagements desc;
 
+--Count of member by city
 select CustCity, COUNT(CustCity) as NumMembers
 from Customers
 group by CustCity;
+
+--Number of advisories per client per agent, and prices
+select CONCAT(custFirstName, ' ', CustLastName) as CustName, CONCAT(agtfirstname, ' ', agtlastname) as agentName, 
+		count(engagementnumber) as NumAdvices,
+		SUM(e.contractprice) as sumContractPrice,
+		SUM(COUNT(engagementnumber)) OVER(PARTITION BY CONCAT(c  me, ' ', CustLastName)) AS TotalAdvicesByCustomer,
+		sum(count(contractprice)) over(partition by concat(
+from Customers as c
+left join Engagements as e
+on c.CustomerID = e.CustomerID
+left join Agents as a
+on a.AgentID = e.AgentID
+group by CONCAT(custFirstName, ' ', CustLastName), CONCAT(agtfirstname, ' ', agtlastname)
+order by TotalAdvicesByCustomer desc;
