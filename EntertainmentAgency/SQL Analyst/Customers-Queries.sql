@@ -1,5 +1,7 @@
 USE EntertainmentAgency;
 
+----**CUSTOMERS**----
+
 --Getting to know the tables and columns of the database
 SELECT table_name, column_name, data_type, character_maximum_length, is_nullable
 FROM INFORMATION_SCHEMA.COLUMNS;
@@ -35,10 +37,10 @@ group by CustCity;
 
 --Number of advisories per client per agent, and prices
 select CONCAT(custFirstName, ' ', CustLastName) as CustName, CONCAT(agtfirstname, ' ', agtlastname) as agentName, 
-		count(engagementnumber) as NumAdvices,
+		COUNT(engagementnumber) as NumAdvices,
 		SUM(e.contractprice) as sumContractPrice,
-		SUM(COUNT(engagementnumber)) OVER(PARTITION BY CONCAT(c  me, ' ', CustLastName)) AS TotalAdvicesByCustomer,
-		sum(count(contractprice)) over(partition by concat(
+		SUM(COUNT(engagementnumber)) over(partition by CONCAT(custFirstName, ' ', CustLastName)) as TotalAdvicesByCustomer,
+	    SUM(SUM(e.contractprice)) over(partition by CONCAT(custFirstName, ' ', CustLastName)) as TotalContractPriceByCustomer
 from Customers as c
 left join Engagements as e
 on c.CustomerID = e.CustomerID
