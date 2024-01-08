@@ -40,4 +40,21 @@ left join Agents as a
 	on a.AgentID = e.AgentID
 where e.StartDate between dateadd(month, -3, StartDate)
 	and e.StartDate
-group by CONCAT(agtfirstname, ' ', AgtLastName)
+group by CONCAT(agtfirstname, ' ', AgtLastName);
+
+-- average for the last quarters  
+select case
+		when MONTH(StartDate) in (9, 10, 11) then '1st Quarter'
+        when MONTH(StartDate) in (12, 1, 2) then '2nd Quarter'
+        when MONTH(StartDate) in (3, 4, 5) then '3rd Quarter'
+        else '4th Quarter'
+	end as Quarters,
+round(avg(contractprice), 2) as avgContractPrice
+from Engagements
+group by case
+		when MONTH(StartDate) in (9, 10, 11) then '1st Quarter'
+        when MONTH(StartDate) in (12, 1, 2) then '2nd Quarter'
+        when MONTH(StartDate) in (3, 4, 5) then '3rd Quarter'
+        else '4th Quarter'
+	end
+order by quarters;
