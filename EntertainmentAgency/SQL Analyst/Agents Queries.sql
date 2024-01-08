@@ -33,4 +33,11 @@ select CONCAT(agtfirstname, ' ', AgtLastName) as agent, round(AVG(commissionrate
 from Agents
 group by CONCAT(agtfirstname, ' ', AgtLastName)
 
---
+--average number of contracts per agent in the last quarter
+select CONCAT(a.agtfirstname, ' ', a.AgtLastName) as agent, round(avg(e.contractprice), 2) as avgcontractAmount
+from Engagements as e
+left join Agents as a
+	on a.AgentID = e.AgentID
+where e.StartDate between dateadd(month, -3, StartDate)
+	and e.StartDate
+group by CONCAT(agtfirstname, ' ', AgtLastName)
