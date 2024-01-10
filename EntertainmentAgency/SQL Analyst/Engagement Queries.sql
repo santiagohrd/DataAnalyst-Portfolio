@@ -39,3 +39,15 @@ left join Entertainers as et
 --where month(startdate) = 9
 group by et.EntStageName
 having count(case when month(e.startdate) > 0 then 1 else null end) >= 1;
+
+--event duration vs. contract price
+select EngagementNumber
+	, sum(datediff(day, startdate, enddate) + 1) as DayDuration
+	, ContractPrice,
+	case
+		when sum(datediff(day, startdate, enddate)) > 0 then 
+		round(ContractPrice / nullif(sum(datediff(day, startdate, enddate)),0),2)
+		else ContractPrice
+	end as priceDay
+from Engagements
+group by EngagementNumber, ContractPrice
