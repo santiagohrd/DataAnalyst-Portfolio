@@ -8,16 +8,6 @@ left join Entertainers as et
 group by et.EntStageName
 order by dayDuration desc;
 
---Number of days in presentation per month
-select MONTH(e.startdate) as month, et.EntStageName,
-	sum(datediff(day, e.startdate, e.enddate)) as DayDuration,
-	sum(sum(datediff(day, e.startdate, e.enddate))) over (partition by MONTH(e.startdate)) as CountDaysinPerformance
-from Engagements as e
-left join Entertainers as et
-	on et.EntertainerID = e.EntertainerID
-group by month(startdate), et.EntStageName
-order by 1;
-
 -- presentations by month and total year
 select et.EntStageName, 
 	count(case when month(startdate) = 1 then 1 else null end) as Jan,
@@ -51,3 +41,4 @@ select EngagementNumber
 	end as priceDay
 from Engagements
 group by EngagementNumber, ContractPrice
+
