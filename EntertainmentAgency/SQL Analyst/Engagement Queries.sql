@@ -32,7 +32,7 @@ having count(case when month(e.startdate) > 0 then 1 else null end) >= 1;
 
 --event duration vs. contract price
 select EngagementNumber
-	, sum(datediff(day, startdate, enddate) + 1) as DayDuration
+	, sum(datediff(day, startdate, enddate) + 1) as DayDuration --I decided to add 1, since single-day contracts were being zeroed out, generating an incomplete display of the total number of days.
 	, ContractPrice,
 	case
 		when sum(datediff(day, startdate, enddate)) > 0 then 
@@ -41,4 +41,6 @@ select EngagementNumber
 	end as priceDay
 from Engagements
 group by EngagementNumber, ContractPrice
+having ContractPrice > 1500;
 
+--
