@@ -41,6 +41,8 @@ select EngagementNumber
 	end as priceDay
 from Engagements
 group by EngagementNumber, ContractPrice
-having ContractPrice > 1500;
+having ContractPrice > (
+						select avg(contractprice)
+						from Engagements);
 
 --
