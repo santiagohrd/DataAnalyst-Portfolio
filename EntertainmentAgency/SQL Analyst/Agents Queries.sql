@@ -59,6 +59,16 @@ where e.StartDate between dateadd(month, -3, StartDate)
 	and e.StartDate
 group by CONCAT(agtfirstname, ' ', AgtLastName);
 
+--difference in days between the start date of one contract and the start date of the next contract for each agent
+select CONCAT(a.agtfirstname, ' ', a.AgtLastName) as agent,
+    EngagementNumber,
+    StartDate,
+    lead(StartDate, 1, NULL) over (partition by a.AgentID order by StartDate) as NextContractStartDate,
+    datediff(day, StartDate, lead(StartDate, 1, NULL) over (partition by a.AgentID order by StartDate)) as DaysUntilNextContract
+from Engagements as e
+left join Agents as a
+	on a.AgentID = e.AgentID;
+
 --average contract price for engagements in each month
 select case
 		when month(StartDate) = 1 then 'Jan'
