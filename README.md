@@ -8,3 +8,11 @@ In this repository, you will come across several folders and sub-folders that co
 I am currently studying at Brigham Young-Idaho University for a bachelor's degree in Applied Technology where I have seen a variety of courses focused on SQL, and other courses to keep strengthening knowledge and constant practice.
 
 In addition to this, the skills acquired from working as a Real-Time Analyst have allowed me to continue improving SQL, Excel, and critical thinking in problem-solving skills.
+
+#### Sudameris Report
+**Code**: https://github.com/santiagohrd/ReporteSudameris
+
+**Description**: The project focused on analyzing a dataset of Sudameris Bank. The dataset included sociodemographic information about clients, even, loans, kind of loans, balances, and other relevant information. The project involved loading the data, cleaning and preprocessing it, and performing exploratory data analysis.
+
+Using PowerBi and a .CSV database, an interactive report on Sudameris bank is created in PowerBI, also making use of DAX formulas.
+
