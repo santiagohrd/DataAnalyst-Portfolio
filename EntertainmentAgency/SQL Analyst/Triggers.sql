@@ -36,3 +36,33 @@ create trigger tr_preventSalayDecrease on agents
 				rollback;
 			end
 		end;
+
+
+-- create CustomersAudit table
+create table CustomersAudit (
+    AuditID INT PRIMARY KEY IDENTITY(1,1),
+    ActionType VARCHAR(10),
+    CustomerID INT,
+    AuditDate DATETIME,
+    ModifiedBy NVARCHAR(100)
+);
+
+--update customers audit table to check who made change
+create trigger tr_AuditCustomersChanges on Customers
+after insert, update, delete as
+	begin
+	set nocount on;
+	
+	insert into CustomersAudit (ActionType, CustomerID, AuditDate, ModifiedBy)
+    select
+        case
+            when exists (select * from inserted) and exists (select * from deleted) then 'UPDATE'
+            when exists (select * from inserted) then 'INSERT'
+            when exists (select * from deleted) then 'DELETE'
+        end,
+        ISNULL(i.CustomerID, d.CustomerID),
+        getdate(),
+        SYSTEM_USER
+    from inserted i
+    full outer join deleted d on i.CustomerID = d.CustomerID;
+	end;
